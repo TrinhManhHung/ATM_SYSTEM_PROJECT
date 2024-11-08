@@ -1,4 +1,5 @@
-
+//pincode.setEchoChar((char) 0); hien thi mat khau
+//pincode.setEchoChar('*'); an mat khau
 package atm;
 
 //Trang Register 
@@ -12,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
 public class UserData {
-	
+	private static int cnt = 1;
 	private JLabel id;
 	private JTextField firstName, lastName, birthDate, email, phoneNumber;
 	private JPasswordField pincode, confirmpincode;
@@ -64,6 +65,7 @@ public class UserData {
 		
 		JButton confirm = GUIConstants.jButton("Continue");
 		
+                
 		if (newAcc) {
 			JButton login = GUIConstants.jButton("Already have an account");
 			login.addActionListener(new ActionListener() {	
@@ -109,6 +111,10 @@ public class UserData {
 						JOptionPane.showMessageDialog(frame, "Email cannot be empty");
 						return;
 					}
+                                        if (emailIn.length() <= 10 || !emailIn.substring(emailIn.length() - 10).equals("@gmail.com")){
+						JOptionPane.showMessageDialog(frame, "Email format doesn't match");
+						return;                                            
+                                        }
 					if (phoneNumberIn.equals("")) {
 						JOptionPane.showMessageDialog(frame, "Phone Number cannot be empty");
 						return;
@@ -194,6 +200,10 @@ public class UserData {
 						JOptionPane.showMessageDialog(frame, "Email cannot be empty");
 						return;
 					}
+                                        if (emailIn.length() <= 10 || !emailIn.substring(emailIn.length() - 10).equals("@gmail.com")){
+						JOptionPane.showMessageDialog(frame, "Email format doesn't match");
+						return;                                            
+                                        }
 					if (phoneNumberIn.equals("")) {
 						JOptionPane.showMessageDialog(frame, "Phone Number cannot be empty");
 						return;

@@ -47,16 +47,23 @@ public class Transfer {
 		JButton confirm = GUIConstants.jButton("Confirm");
 		confirm.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { //mo ngoac
+                            try{
                                 int idReceived = Integer.parseInt(id.getText()); 
 				double amountIn = Double.parseDouble(amount.getText());
                                 if(!UsersDatabase.checkExistUser(idReceived, database)){
                                     JOptionPane.showMessageDialog(null, "Not Valid ID!");
                                 }
+                                else if (idReceived == user.getID()) {
+                                    JOptionPane.showMessageDialog(null, "Cannot transfer money to yourself!");
+                                }
                                 else{
                                     User userReceived = UsersDatabase.getUserByID(idReceived, database);
                                     if(user.getBalance() < amountIn){
                                         JOptionPane.showMessageDialog(null, "Not Enough Money! Please Again!");
+                                    }
+                                    else if(amountIn <= 0){
+                                        JOptionPane.showMessageDialog(null, "Money must be positive!");
                                     }
                                     else{
                                         //Xứ lý giao dịch + số dư người gửi
@@ -66,20 +73,23 @@ public class Transfer {
                                         transaction1.setType("Transfer Out");
                                         TransactionsDatabase.saveTransaction(transaction1, database);
                                         user.setBalance(user.getBalance()-amountIn);
-                                        System.out.println(user.getBalance() + " " + amountIn);
-                                        UsersDatabase.updateUserBalance(user, database);
+                                        UsersDatabase.updateUserData(user, database);
                                         //Xử lý giao dịch + số dư người nhận
                                         Transaction transaction2 = new Transaction(amountIn, userReceived);
                                         transaction2.setID(idTrans);
                                         transaction2.setType("Transfer In");
                                         TransactionsDatabase.saveTransaction(transaction2, database);
                                         userReceived.setBalance(userReceived.getBalance()+amountIn);
-                                        UsersDatabase.updateUserBalance(userReceived, database);
+                                        UsersDatabase.updateUserData(userReceived, database);
                                         JOptionPane.showMessageDialog(null, "Operation done successfully");
                                         frame.dispose();
                                     }
                                 }
-			}
+                            }
+                            catch (NumberFormatException u){
+                                JOptionPane.showMessageDialog(null, "Invalid Number!");
+                            }
+			}//dong ngoac
 		});
 		panel.add(confirm);
 		

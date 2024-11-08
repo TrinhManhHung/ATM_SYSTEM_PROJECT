@@ -46,31 +46,44 @@ public class Operation {
 		confirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				double amountIn = Double.parseDouble(amount.getText());
-				if (operation.equals("Deposit")) {
-					Transaction transaction = new Transaction(amountIn, user);
-					transaction.setID(TransactionsDatabase.getNextID(database));
-                                        transaction.setType("Deposit");
-					user.setBalance(user.getBalance()+amountIn);
-					TransactionsDatabase.saveTransaction(transaction, database);
-					UsersDatabase.updateUserBalance(user, database);
-					JOptionPane.showMessageDialog(null, "Operation done successfully");
-					frame.dispose();
-				} else if (operation.equals("Withdraw")) {
-                                        if(user.getBalance() < amountIn){
-                                            JOptionPane.showMessageDialog(null, "Not Enough Money! Please Again!");
-                                        }
-                                        else{
-                                            Transaction transaction = new Transaction(amountIn*-1, user);
-                                            transaction.setID(TransactionsDatabase.getNextID(database));
-                                            transaction.setType("Withdraw");
-                                            user.setBalance(user.getBalance()-amountIn);
-                                            TransactionsDatabase.saveTransaction(transaction, database);
-                                            UsersDatabase.updateUserBalance(user, database);
-                                            JOptionPane.showMessageDialog(null, "Operation done successfully");
-                                            frame.dispose();
-                                        }
-				}
+
+                                try{
+                                    double amountIn = Double.parseDouble(amount.getText());
+                                    if (operation.equals("Deposit")) {
+                                            if(amountIn <= 0){
+                                                JOptionPane.showMessageDialog(null, "Money must be positive!");
+                                            }
+                                            else{
+                                                Transaction transaction = new Transaction(amountIn, user);
+                                                transaction.setID(TransactionsDatabase.getNextID(database));
+                                                transaction.setType("Deposit");
+                                                user.setBalance(user.getBalance()+amountIn);
+                                                TransactionsDatabase.saveTransaction(transaction, database);
+                                                UsersDatabase.updateUserBalance(user, database);
+                                                JOptionPane.showMessageDialog(null, "Operation done successfully");
+                                                frame.dispose();
+                                            }
+                                    } else if (operation.equals("Withdraw")) {
+                                            if(user.getBalance() < amountIn){
+                                                JOptionPane.showMessageDialog(null, "Not Enough Money! Please Again!");
+                                            }
+                                            else if(amountIn <= 0){
+                                                JOptionPane.showMessageDialog(null, "Money must be positive!");
+                                            }
+                                            else{
+                                                Transaction transaction = new Transaction(amountIn*-1, user);
+                                                transaction.setID(TransactionsDatabase.getNextID(database));
+                                                transaction.setType("Withdraw");
+                                                user.setBalance(user.getBalance()-amountIn);
+                                                TransactionsDatabase.saveTransaction(transaction, database);
+                                                UsersDatabase.updateUserBalance(user, database);
+                                                JOptionPane.showMessageDialog(null, "Operation done successfully");
+                                                frame.dispose();
+                                            }
+                                    }
+                                } catch(NumberFormatException u){
+                                    JOptionPane.showMessageDialog(null, "Invalid Number!");
+                                }
 			}
 		});
 		panel.add(confirm);
